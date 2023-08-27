@@ -14,13 +14,13 @@ export async function createCommunity(
   username: string,
   image: string,
   bio: string,
-  createdById: string // Change the parameter name to reflect it's an id
+  createdByUserId: string // Change the parameter name to reflect it's an id
 ) {
   try {
     connectToDB();
 
     // Find the user with the provided unique id
-    const user = await User.findOne({ id: createdById });
+    const user = await User.findOne({ id: createdByUserId });
 
     if (!user) {
       throw new Error("User not found"); // Handle the case if the user with the id is not found
@@ -53,7 +53,8 @@ export async function fetchCommunityDetails(id: string) {
   try {
     connectToDB();
 
-    const communityDetails = await Community.findOne({ id }).populate([
+    const communityDetails = await Community.findOne({ id })
+    .populate([
       "createdBy",
       {
         path: "members",
